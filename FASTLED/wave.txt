@@ -1,0 +1,47 @@
+#include <Arduino.h>
+#include <FastLED.h>
+
+// leds in your strip
+#define NUM_LEDS 90
+
+// WS 2813 MODEL = 4 PINS
+// WS 2812 or 2811B = 3 PINS
+
+#define DATA_PIN 3 // D0 pin on your LEDSTRIP
+#define LED_TYPE  WS2812B // LEDSTRIP MODEL
+
+// Define the array of leds
+CRGB leds[NUM_LEDS];
+
+void setup() {
+  Serial.begin(57600); // BOARD BAUD RATE
+  Serial.println("LOADING");
+  delay(2500); // wait 2.5 sec to set up the LEDSTRIP
+  Serial.println("STARTING");
+  FastLED.addLeds<WS2812B,DATA_PIN,RGB>(leds,NUM_LEDS); // ADD THE LEDSTRIP
+  FastLED.setBrightness(50); // SET BRIGHTNESS
+}
+
+void fadeall() { for(int i = 0; i < NUM_LEDS; i++) { leds[i].nscale8(250); } }
+
+void loop() {
+  // FIRST LOOP
+  for(int i = 0; i < NUM_LEDS; i++) {
+    leds[i].setRGB(51, 51, 255);  // Set Color HERE!!!
+    // Show the leds
+    FastLED.show();
+    fadeall();
+    // Wait a little bit before we loop around and do it again
+    delay(25); // IT'S MILLISEC NOT SEC !!!
+  }
+
+  // BACK LOOP
+  for(int i = (NUM_LEDS)-1; i >= 0; i--) {
+    leds[i].setRGB(51, 51, 255); // Set Color HERE!!!
+    // Show the leds
+    FastLED.show();
+    fadeall();
+    // Wait a little bit before we loop around and do it again
+    delay(25); // IT'S MILLISEC NOT SEC !!!
+  }
+}
